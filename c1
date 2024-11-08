@@ -4,8 +4,15 @@
 speak_time() {
     current_time=$(date +"%I:%M %p") # Format time as hh:mm AM/PM
     echo "The current time is $current_time"
-    # Use espeak to vocalize the time
-    espeak "The current time is $current_time"
+    
+    # Check if espeak is installed
+    if command -v espeak >/dev/null 2>&1; then
+        # Use espeak to vocalize the time
+        espeak "The current time is $current_time" 2>/dev/null
+    else
+        echo "Error: espeak is not installed. Please install it and try again."
+        exit 1
+    fi
 }
 
 # Call the function
