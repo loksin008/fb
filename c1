@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Function to get the current time in a readable format
+speak_time() {
+    current_time=$(date +"%I:%M %p") # Format time as hh:mm AM/PM
+    echo "The current time is $current_time"
+    # Use espeak to vocalize the time
+    espeak "The current time is $current_time"
+}
+
+# Call the function
+speak_time
