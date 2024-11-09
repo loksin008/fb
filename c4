@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Function to draw the analog clock
+draw_clock() {
+    # Get the current time
+    hours=$(date +%H)
+    minutes=$(date +%M)
+    seconds=$(date +%S)
+
+    # Normalize hours for 12-hour clock
+    if [ $hours -gt 12 ]; then
+        hours=$((hours - 12))
+    fi
+
+    # Adjust the angles of the clock hands
+    second_angle=$(( 6 * seconds )) # 360 degrees / 60 seconds = 6 degrees per second
+    minute_angle=$(( 6 * minutes )) # 360 degrees / 60 minutes = 6 degrees per minute
+    hour_angle=$(( 30 * hours + minutes / 2 )) # 360 degrees / 12 hours = 30 degrees per hour
+
+    # Clear the terminal
+    clear
+
+    # Print clock frame
+    echo "     _______"
+    echo "    /       \\"
+    echo "   |    |    |"
+    echo "   |    |    |"
+    echo "   |    |    |"
+    echo "   |____|____|"
+    
+    # Print current time
+    echo "Time: $hours:$minutes:$seconds"
+    echo "Hour hand angle: $hour_angle"
+    echo "Minute hand angle: $minute_angle"
+    echo "Second hand angle: $second_angle"
+}
+
+# Loop to keep the clock updating every second
+while true
+do
+    draw_clock
+    sleep 1
+done
