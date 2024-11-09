@@ -1,60 +1,72 @@
-import tkinter as tk
-import time
+#!/bin/bash
 
-class StopwatchApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Stopwatch")
+# Initialize variables
+SECONDS=0
+START_TIME=0
+RUNNING=false
 
-        # Stopwatch Variables
-        self.running = False
-        self.counter = 0
+# Function to start the stopwatch
+start() {
+    if [ "$RUNNING" = true ]; then
+        echo "Stopwatch is already running."
+    else
+        START_TIME=$(date +%s)
+        RUNNING=true
+        echo "Stopwatch started."
+        while $RUNNING; do
+            # Calculate elapsed time
+            ELAPSED_TIME=$((SECONDS + $(date +%s) - START_TIME))
+            # Format time in HH:MM:SS
+            FORMATTED_TIME=$(printf "%02d:%02d:%02d\n" $(($ELAPSED_TIME / 3600)) $(($ELAPSED_TIME % 3600 / 60)) $(($ELAPSED_TIME % 60)))
+            echo -ne "\r$FORMATTED_TIME"
+            sleep 1
+        done
+    fi
+}
 
-        # Create GUI Elements
-        self.time_label = tk.Label(root, text="00:00:00", font=("Helvetica", 36))
-        self.time_label.pack(pady=20)
+# Function to stop the stopwatch
+stop() {
+    if [ "$RUNNING" = true ]; then
+        RUNNING=false
+        SECONDS=$((SECONDS + $(date +%s) - START_TIME))
+        echo -e "\nStopwatch stopped."
+    else
+        echo "Stopwatch is not running."
+    fi
+}
 
-        # Control Buttons
-        self.start_button = tk.Button(root, text="Start", font=("Helvetica", 14), command=self.start)
-        self.start_button.pack(side=tk.LEFT, padx=10)
-        
-        self.stop_button = tk.Button(root, text="Stop", font=("Helvetica", 14), command=self.stop)
-        self.stop_button.pack(side=tk.LEFT, padx=10)
-        
-        self.reset_button = tk.Button(root, text="Reset", font=("Helvetica", 14), command=self.reset)
-        self.reset_button.pack(side=tk.LEFT, padx=10)
+# Function to reset the stopwatch
+reset() {
+    SECONDS=0
+    RUNNING=false
+    echo -e "\nStopwatch reset."
+}
 
-        # Navigation Buttons
-        self.back_button = tk.Button(root, text="Back", font=("Helvetica", 14), command=self.back)
-        self.back_button.pack(side=tk.RIGHT, padx=10)
-        
-        self.exit_button = tk.Button(root, text="Exit", font=("Helvetica", 14), command=root.quit)
-        self.exit_button.pack(side=tk.RIGHT, padx=10)
+# Main menu loop
+while true; do
+    echo "Stopwatch - Choose an option:"
+    echo "1) Start"
+    echo "2) Stop"
+    echo "3) Reset"
+    echo "4) Exit"
+    read -p "Enter your choice: " choice
 
-    def update_time(self):
-        if self.running:
-            self.counter += 1
-            time_str = time.strftime("%H:%M:%S", time.gmtime(self.counter))
-            self.time_label.config(text=time_str)
-            self.root.after(1000, self.update_time)
-
-    def start(self):
-        if not self.running:
-            self.running = True
-            self.update_time()
-
-    def stop(self):
-        self.running = False
-
-    def reset(self):
-        self.counter = 0
-        self.time_label.config(text="00:00:00")
-        self.running = False
-
-    def back(self):
-        self.reset()  # Stops and resets the stopwatch; customize as needed
-
-# Main code to run the app
-root = tk.Tk()
-app = StopwatchApp(root)
-root.mainloop()
+    case $choice in
+        1)
+            start
+            ;;
+        2)
+            stop
+            ;;
+        3)
+            reset
+            ;;
+        4)
+            echo "Exiting..."
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please choose again."
+            ;;
+    esac
+done
