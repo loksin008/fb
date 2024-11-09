@@ -71,29 +71,31 @@ print_digit() {
     esac
 }
 
-# Function to draw the large digital clock
+# Function to draw the large digital clock in HH::MM format
 draw_clock() {
-    # Get the current time in HH:MM:SS format
-    current_time=$(date +%T)
+    # Get the current time in HH:MM format (no seconds, just hours and minutes)
+    current_time=$(date +%H::%M)
 
     # Clear the terminal and set background
     clear
     set_background
 
     # Print the large digital clock
-    for i in $(seq 0 1 7); do
-        for digit in $(echo $current_time | sed 's/://g' | fold -w 1 | head -n $((i+1)) | tail -n 1); do
-            print_digit $digit
-        done
+    for i in $(echo $current_time | sed 's/://g' | fold -w 1); do
+        print_digit $i
     done
 
     # Print the time below the large clock (optional)
     echo "Time: $current_time"
 }
 
-# Loop to keep the clock updating every second
+# Loop to keep the clock updating every second with blinking effect
 while true
 do
     draw_clock
-    sleep 1
+    sleep 0.5  # Show clock for 0.5 seconds
+
+    # Clear the screen to create the blinking effect
+    clear
+    sleep 0.5  # Hide clock for 0.5 seconds
 done
