@@ -54,6 +54,11 @@ while true; do
     case $choice in
         1)
             start
+            echo -e "\nDo you want to stop the stopwatch? (y/n)"
+            read stop_choice
+            if [ "$stop_choice" == "y" ]; then
+                stop
+            fi
             ;;
         2)
             stop
@@ -62,6 +67,7 @@ while true; do
             reset
             ;;
         4)
+            stop
             echo "Exiting..."
             exit 0
             ;;
