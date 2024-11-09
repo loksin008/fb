@@ -33,6 +33,14 @@ speak_datetime() {
 
         # Wait for another half second before displaying the time again
         sleep 0.5
+
+        # Check for exit condition
+        echo -n "Press 'q' to exit... "
+        read -t 0.5 -n 1 input
+        if [[ $input == "q" ]]; then
+            echo -e "\nExiting..."
+            break
+        fi
     done
 }
 
