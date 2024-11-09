@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Function to change the terminal background color to yellow
+# Function to change the terminal background color to red
 set_background() {
-    echo -e "\033[48;5;226m"  # Set background color to yellow
+    echo -e "\033[48;5;160m"  # Set background color to red (color code 160)
 }
 
 # Function to draw the large analog clock
