@@ -1,16 +1,25 @@
 #!/bin/bash
 
+# Function to get and announce the current and next day's date and time
 speak_datetime() {
+    # Get the current day, month, date, and time
     current_datetime=$(date +"%A, %B %d, %I:%M %p")
+    # Get the next day's date
+    next_day=$(date -d "+1 day" +"%A, %B %d")
+
+    # Display current date and time
     echo "Today is $current_datetime"
+    echo "Tomorrow is $next_day"
     
-    if command -v espeak >/dev/null 2>&1 && command -v paplay >/dev/null 2>&1; then
-        # Generate audio file, then play with paplay
-        espeak "Today is $current_datetime" --stdout | paplay
+    # Check if espeak is installed
+    if command -v espeak >/dev/null 2>&1; then
+        # Use espeak to vocalize with a slower speed (adjust speed as needed, e.g., -s 100)
+        espeak -s 100 "Today is $current_datetime. Tomorrow is $next_day"
     else
-        echo "Error: espeak or paplay is not installed. Please install them and try again."
+        echo "Error: espeak is not installed. Please install it and try again."
         exit 1
     fi
 }
 
+# Call the function
 speak_datetime
