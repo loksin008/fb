@@ -12,6 +12,11 @@ draw_clock() {
     minutes=$(date +%M)
     seconds=$(date +%S)
 
+    # Calculate remaining hours of the day
+    remaining_hours=$((24 - hours))
+    remaining_minutes=$((60 - minutes))
+    remaining_seconds=$((60 - seconds))
+
     # Normalize hours for 12-hour clock
     if [ $hours -gt 12 ]; then
         hours=$((hours - 12))
@@ -37,15 +42,16 @@ draw_clock() {
     echo "           `-.               .-'"
     echo "              `-._________.-'"
 
-    # Print current time
+    # Print current time and remaining hours
     echo ""
     echo "Time: $hours:$minutes:$seconds"
+    echo "Remaining time until midnight: $remaining_hours hours, $remaining_minutes minutes, $remaining_seconds seconds."
 
-    # Use text-to-speech (espeak or another command) to announce the time
+    # Use text-to-speech (espeak or another command) to announce the time and remaining hours
     if command -v espeak &> /dev/null; then
-        espeak "The current time is $hours hours and $minutes minutes."
+        espeak "The current time is $hours hours and $minutes minutes. Remaining time until midnight is $remaining_hours hours and $remaining_minutes minutes."
     else
-        echo "Text-to-speech command (espeak) not found. Time: $hours:$minutes"
+        echo "Text-to-speech command (espeak) not found. Time: $hours:$minutes. Remaining time: $remaining_hours hours, $remaining_minutes minutes."
     fi
 }
 
