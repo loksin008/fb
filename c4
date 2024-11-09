@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Function to draw the analog clock
+# Function to change the terminal background color to yellow
+set_background() {
+    echo -e "\033[48;5;226m"  # Set background color to yellow
+}
+
+# Function to draw the large analog clock
 draw_clock() {
     # Get the current time
     hours=$(date +%H)
@@ -12,27 +17,36 @@ draw_clock() {
         hours=$((hours - 12))
     fi
 
-    # Adjust the angles of the clock hands
-    second_angle=$(( 6 * seconds )) # 360 degrees / 60 seconds = 6 degrees per second
-    minute_angle=$(( 6 * minutes )) # 360 degrees / 60 minutes = 6 degrees per minute
-    hour_angle=$(( 30 * hours + minutes / 2 )) # 360 degrees / 12 hours = 30 degrees per hour
-
-    # Clear the terminal
+    # Clear the terminal and set background
     clear
+    set_background
 
-    # Print clock frame
-    echo "     _______"
-    echo "    /       \\"
-    echo "   |    |    |"
-    echo "   |    |    |"
-    echo "   |    |    |"
-    echo "   |____|____|"
-    
+    # Print clock frame and hands in big ASCII art
+    echo "                   _________"
+    echo "              .-'         `-."
+    echo "           .-'               `-."
+    echo "         .'                     `."
+    echo "        /                         \\"
+    echo "       ;       O               O    ;"
+    echo "      ;                                 ;"
+    echo "      |         O               O     |"
+    echo "      ;                                 ;"
+    echo "       ;         O               O    ;"
+    echo "        \\                         /"
+    echo "         `.                     .'"
+    echo "           `-.               .-'"
+    echo "              `-._________.-'"
+
     # Print current time
+    echo ""
     echo "Time: $hours:$minutes:$seconds"
-    echo "Hour hand angle: $hour_angle"
-    echo "Minute hand angle: $minute_angle"
-    echo "Second hand angle: $second_angle"
+
+    # Use text-to-speech (espeak or another command) to announce the time
+    if command -v espeak &> /dev/null; then
+        espeak "The current time is $hours hours and $minutes minutes."
+    else
+        echo "Text-to-speech command (espeak) not found. Time: $hours:$minutes"
+    fi
 }
 
 # Loop to keep the clock updating every second
