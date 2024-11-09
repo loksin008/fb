@@ -8,8 +8,8 @@ speak_datetime() {
     # Get the next day's date
     next_day=$(date -d "+1 day" +"%A, %B %d")
 
-    # Display current date and time, with time highlighted in yellow
-    echo -e "Today is $current_datetime \033[1;33m$current_time\033[0m"
+    # Display current date and time, with time in yellow text and green background
+    echo -e "Today is $current_datetime \033[1;33m\033[42m$current_time\033[0m"
     echo "Tomorrow is $next_day"
     
     # Check if espeak is installed
