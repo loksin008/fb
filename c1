@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Function to get the current time in a readable format
-speak_time() {
-    current_time=$(date +"%I:%M %p") # Format time as hh:mm AM/PM
-    echo "The current time is $current_time"
+# Function to get the current date and time in a readable format
+speak_datetime() {
+    current_datetime=$(date +"%A, %B %d, %I:%M %p") # Format: Day, Month Date, hh:mm AM/PM
+    echo "Today is $current_datetime"
     
     # Check if espeak is installed
     if command -v espeak >/dev/null 2>&1; then
-        # Use espeak to vocalize the time
-        espeak "The current time is $current_time" 2>/dev/null
+        # Save the audio to a file and play with aplay (or directly with espeak)
+        espeak "Today is $current_datetime" --stdout | aplay 2>/dev/null
     else
         echo "Error: espeak is not installed. Please install it and try again."
         exit 1
@@ -16,4 +16,4 @@ speak_time() {
 }
 
 # Call the function
-speak_time
+speak_datetime
