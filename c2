@@ -1,1 +1,33 @@
+#!/bin/bash
 
+# Alarm clock script
+
+# Function to play the alarm sound
+play_alarm() {
+    # You can replace this with your sound file path (e.g., .mp3 or .wav)
+    sound_file="/path/to/your/alarm_sound.mp3"
+
+    if command -v mpg123 &> /dev/null; then
+        mpg123 "$sound_file"
+    elif command -v vlc &> /dev/null; then
+        vlc --play-and-exit "$sound_file"
+    else
+        echo "No supported audio player found. Please install mpg123 or VLC."
+        exit 1
+    fi
+}
+
+# Ask user for alarm time
+echo "Set the alarm time (24-hour format, HH:MM):"
+read alarm_time
+
+# Loop until the current time matches the alarm time
+while true; do
+    current_time=$(date +%H:%M)
+    if [ "$current_time" == "$alarm_time" ]; then
+        echo "Alarm! It's $current_time"
+        play_alarm
+        break
+    fi
+    sleep 60  # Wait for 1 minute before checking again
+done
