@@ -12,8 +12,8 @@ speak_datetime() {
     next_day=$(date -d "+1 day" +"%A, %B %d")
 
     # Display current date and time with different background colors
-    echo -e "Today is \033[41m$current_day\033[0m, \033[41m$current_month\033[0m $current_date, \033[1;33m\033[42m$current_time\033[0m"
-    echo "Tomorrow is $next_day"
+    echo -e "Today is \033[41m$current_day\033[0m, \033[41m$current_month\033[0m \033[41m$current_date\033[0m, \033[1;33m\033[42m$current_time\033[0m"
+    echo -e "Tomorrow is \033[43m$next_day\033[0m"
     
     # Check if espeak is installed
     if command -v espeak >/dev/null 2>&1; then
