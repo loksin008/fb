@@ -1,20 +1,16 @@
 #!/bin/bash
 
-# Function to get and announce the current day, month, and time
 speak_datetime() {
-    # Get the current day, month, date, and time
-    current_datetime=$(date +"%A, %B %d, %I:%M %p") # Format: Day, Month Date, hh:mm AM/PM
+    current_datetime=$(date +"%A, %B %d, %I:%M %p")
     echo "Today is $current_datetime"
     
-    # Check if espeak is installed
-    if command -v espeak >/dev/null 2>&1; then
-        # Use espeak directly to vocalize the date and time
-        espeak "Today is $current_datetime"
+    if command -v espeak >/dev/null 2>&1 && command -v paplay >/dev/null 2>&1; then
+        # Generate audio file, then play with paplay
+        espeak "Today is $current_datetime" --stdout | paplay
     else
-        echo "Error: espeak is not installed. Please install it and try again."
+        echo "Error: espeak or paplay is not installed. Please install them and try again."
         exit 1
     fi
 }
 
-# Call the function
 speak_datetime
