@@ -20,6 +20,14 @@ start() {
             FORMATTED_TIME=$(printf "%02d:%02d:%02d\n" $(($ELAPSED_TIME / 3600)) $(($ELAPSED_TIME % 3600 / 60)) $(($ELAPSED_TIME % 60)))
             echo -ne "\r$FORMATTED_TIME"
             sleep 1
+            # Prompt for Stop, Reset, or Exit options while stopwatch is running
+            echo -e "\nOptions: Stop (s) | Reset (r) | Exit (e)"
+            read -t 1 -n 1 user_input
+            case $user_input in
+                s) stop ;;
+                r) reset ;;
+                e) stop; echo "Exiting..."; exit 0 ;;
+            esac
         done
     fi
 }
@@ -46,27 +54,14 @@ reset() {
 while true; do
     echo "Stopwatch - Choose an option:"
     echo "1) Start"
-    echo "2) Stop"
-    echo "3) Reset"
-    echo "4) Exit"
+    echo "2) Exit"
     read -p "Enter your choice: " choice
 
     case $choice in
         1)
             start
-            echo -e "\nDo you want to stop the stopwatch? (y/n)"
-            read stop_choice
-            if [ "$stop_choice" == "y" ]; then
-                stop
-            fi
             ;;
         2)
-            stop
-            ;;
-        3)
-            reset
-            ;;
-        4)
             stop
             echo "Exiting..."
             exit 0
