@@ -5,8 +5,7 @@
 # Function to play the alarm sound
 play_alarm() {
     # You can replace this with your sound file path (e.g., .mp3 or .wav)
-    sound_file="/path/to/your/alarm_sound.mp3"
-
+    sound_file="/data/data/com.termux/files/home/z.mp3"
     if command -v mpg123 &> /dev/null; then
         mpg123 "$sound_file"
     elif command -v vlc &> /dev/null; then
