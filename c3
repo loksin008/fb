@@ -1,6 +1,5 @@
 import tkinter as tk
 import time
-import winsound  # Works on Windows, for other OS, you might need another sound library
 
 class StopwatchApp:
     def __init__(self, root):
@@ -42,24 +41,18 @@ class StopwatchApp:
     def start(self):
         if not self.running:
             self.running = True
-            self.play_beep()
             self.update_time()
 
     def stop(self):
-        if self.running:
-            self.running = False
-            self.play_beep()
+        self.running = False
 
     def reset(self):
         self.counter = 0
         self.time_label.config(text="00:00:00")
         self.running = False
 
-    def play_beep(self):
-        winsound.Beep(1000, 200)  # Beep at 1000 Hz for 200 ms
-
     def back(self):
-        self.reset()  # You can customize the back behavior if needed
+        self.reset()  # Stops and resets the stopwatch; customize as needed
 
 # Main code to run the app
 root = tk.Tk()
