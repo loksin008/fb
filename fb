@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Prompt the user for the Facebook video URL
+read -p "Enter the Facebook video URL: " url
+
+# Download the video using yt-dlp
+yt-dlp "$url" -o "~/Downloads/%(title)s.%(ext)s"
+
+# Optional: Specify the quality if needed
+# yt-dlp -f 'best' "$url" -o "~/Downloads/%(title)s.%(ext)s"
