@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Prompt the user for the Starmaker song URL
+read -p "Enter the Starmaker song URL: " url
+
+# Attempt to download the song using yt-dlp
+yt-dlp "$url" -o "~/Downloads/%(title)s.%(ext)s"
+
+# Optional: Specify format options for audio only
+# yt-dlp -f 'bestaudio' "$url" -o "~/Downloads/%(title)s.%(ext)s"
