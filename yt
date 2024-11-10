@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Prompt the user for the YouTube video URL
+read -p "Enter the YouTube video URL: " url
+
+# Use yt-dlp (renamed here as video-downloader) to download the video
+yt-dlp "$url" -o "~/Downloads/%(title)s.%(ext)s"
+
+# Optional: To specify a format, you can use:
+# yt-dlp -f 'bestvideo+bestaudio' "$url" -o "~/Downloads/%(title)s.%(ext)s"
