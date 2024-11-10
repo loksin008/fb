@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Prompt the user for the Instagram video URL
+read -p "Enter the Instagram video URL: " url
+
+# Use yt-dlp to download the video
+yt-dlp "$url" -o "~/Downloads/%(title)s.%(ext)s"
+
+# Optional: Specify format if needed, such as 'best' quality
+# yt-dlp -f 'best' "$url" -o "~/Downloads/%(title)s.%(ext)s"
