@@ -64,4 +64,21 @@ LAST_URL_FILE="$HOME/.bash_browser_last_url"
 if [ -z "$url" ]; then
     # If reload flag is set, load the last opened URL
     if [ "$reload" = "true" ]; then
-        if [ -f "$L
+        if [ -f "$LAST_URL_FILE" ]; then
+            url=$(cat "$LAST_URL_FILE")
+        else
+            echo "No previously loaded URL found."
+            exit 1
+        fi
+    else
+        # Default to homepage if no URL is specified
+        url="$HOMEPAGE"
+    fi
+fi
+
+# Save the URL to the last opened file
+echo "$url" > "$LAST_URL_FILE"
+
+# Open the URL with the chosen browser
+echo "Opening $url with $BROWSER..."
+$BROWSER "$url"
