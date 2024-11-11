@@ -15,70 +15,81 @@ else
     exit 1
 fi
 
+# Initialize URL history array
+declare -a URL_HISTORY=()
+CURRENT_URL=$HOMEPAGE
+
 # Function to display help
 display_help() {
-    echo "Usage: $0 [option] [url]"
-    echo "Options:"
-    echo "  -u <url>    Open a specific URL"
-    echo "  -h          Display this help message"
-    echo "  -m          Open the homepage ($HOMEPAGE)"
-    echo "  -r          Reload the last opened URL"
+    echo "Commands:"
+    echo "  [o]pen <url>   - Enter a new URL to visit"
+    echo "  [h]ome         - Go to the homepage"
+    echo "  [b]ack         - Go back to the previous page"
+    echo "  [r]eload       - Reload the current page"
+    echo "  [e]xit         - Exit the browser"
+    echo "  [help]         - Show this help message"
 }
 
-# Variables
-url=""
-reload="false"
+# Main browser loop
+while true; do
+    # Save the current URL to the history file
+    echo "$CURRENT_URL" > "$HOME/.bash_browser_last_url"
+    URL_HISTORY+=("$CURRENT_URL")
 
-# Parse command-line options
-while getopts ":u:hmr" opt; do
-    case ${opt} in
-        u ) # Open a specific URL
-            url="$OPTARG"
+    # Open the URL with the chosen browser
+    echo "Opening $CURRENT_URL with $BROWSER..."
+    $BROWSER "$CURRENT_URL"
+
+    # Prompt user for next action
+    echo
+    echo "Enter a command ([h]ome, [o]pen <url>, [b]ack, [r]eload, [e]xit, [help]): "
+    read -r command args
+
+    case $command in
+        # Open a new URL
+        o|open)
+            if [ -z "$args" ]; then
+                echo "Please provide a URL to open."
+            else
+                CURRENT_URL="$args"
+            fi
             ;;
-        h ) # Display help
+        
+        # Go to the homepage
+        h|home)
+            CURRENT_URL=$HOMEPAGE
+            ;;
+
+        # Go back to the previous page
+        b|back)
+            if [ ${#URL_HISTORY[@]} -gt 1 ]; then
+                unset 'URL_HISTORY[-1]'  # Remove the current page from history
+                CURRENT_URL="${URL_HISTORY[-1]}"  # Go to the last URL in history
+                unset 'URL_HISTORY[-1]'  # Remove the "back" page to avoid revisiting
+            else
+                echo "No previous page in history."
+            fi
+            ;;
+
+        # Reload the current page
+        r|reload)
+            # Do nothing, CURRENT_URL remains the same
+            ;;
+        
+        # Exit the browser
+        e|exit)
+            echo "Exiting the browser."
+            break
+            ;;
+        
+        # Display help
+        help)
             display_help
-            exit 0
             ;;
-        m ) # Open homepage
-            url="$HOMEPAGE"
-            ;;
-        r ) # Reload
-            reload="true"
-            ;;
-        \? ) # Invalid option
-            echo "Invalid option: -$OPTARG" >&2
-            display_help
-            exit 1
-            ;;
-        : ) # Missing argument
-            echo "Option -$OPTARG requires an argument." >&2
-            exit 1
+
+        # Unrecognized command
+        *)
+            echo "Unrecognized command. Type 'help' for a list of commands."
             ;;
     esac
 done
-
-# Save last opened URL
-LAST_URL_FILE="$HOME/.bash_browser_last_url"
-
-# Determine which URL to open
-if [ -z "$url" ]; then
-    # If reload flag is set, load the last opened URL
-    if [ "$reload" = "true" ]; then
-        if [ -f "$LAST_URL_FILE" ]; then
-            url=$(cat "$LAST_URL_FILE")
-        else
-            echo "No previously loaded URL found."
-            exit 1
-        fi
-    else
-        # Default to homepage if no URL is specified
-        url="$HOMEPAGE"
-    fi
-fi
-
-# Save the URL to the last opened file
-echo "$url" > "$LAST_URL_FILE"
-
-# Open the URL with the chosen browser and capture errors
-echo "Opening $url with $BROWSER..."
-$BROWSER "$url" || echo "Error: Failed to load $url with $BROWSER. Please check your internet connection or try another browser."
