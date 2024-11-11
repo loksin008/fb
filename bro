@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# Fetch the content of the URL
+# Fetch and display the content of the URL using lynx
 url=$1
 echo "Fetching content from $url..."
-curl -s "$url" | html2text
+lynx -dump "$url"
