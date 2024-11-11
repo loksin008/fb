@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# Fetch and display the content of the URL using lynx
+# Fetch and strip HTML tags to get plain text
 url=$1
-echo "Fetching content from $url..."
-lynx -dump "$url"
+echo "Fetching and converting content from $url..."
+curl -s "$url" | sed 's/<[^>]*>//g'
