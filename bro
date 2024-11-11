@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default homepage
-HOMEPAGE="https://www.google.com/"
+HOMEPAGE="https://www.wikipedia.org"
 # Detect available text browser
 if command -v w3m &> /dev/null; then
     BROWSER="w3m"
