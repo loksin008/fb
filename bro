@@ -2,6 +2,7 @@
 
 # Default homepage
 HOMEPAGE="https://www.wikipedia.org"
+
 # Detect available text browser
 if command -v w3m &> /dev/null; then
     BROWSER="w3m"
@@ -78,6 +79,6 @@ fi
 # Save the URL to the last opened file
 echo "$url" > "$LAST_URL_FILE"
 
-# Open the URL with the chosen browser
+# Open the URL with the chosen browser and capture errors
 echo "Opening $url with $BROWSER..."
-$BROWSER "$url"
+$BROWSER "$url" || echo "Error: Failed to load $url with $BROWSER. Please check your internet connection or try another browser."
