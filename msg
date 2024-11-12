@@ -1,8 +1,14 @@
 #!/bin/bash
 
-# Recipient's phone number and carrier
+# Ensure the user has provided enough arguments
+if [ "$#" -lt 3 ]; then
+  echo "Usage: ./send_sms_via_email.sh <phone_number> <carrier> <message>"
+  exit 1
+fi
+
+# Recipient's phone number, carrier, and message
 PHONE_NUMBER="$1"
-CARRIER="$2"
+CARRIER="${2,,}"  # Convert carrier to lowercase to match array keys
 MESSAGE="$3"
 
 # Carrier email-to-SMS gateways
